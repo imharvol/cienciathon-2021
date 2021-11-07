@@ -159,32 +159,9 @@ const getKeywords = async (text) => {
     LanguageCode: textLanguage
   }
   const keywords = await comprehend.detectKeyPhrases(params).promise()
-  const filteredKeywords = keywords.KeyPhrases.filter(e => e.Score >= 0.99997).map(e => e.Text)
-
+  const filteredKeywords = keywords.KeyPhrases/*.filter(e => e.Score >= 0.99997)*/.map(e => ({ text: e.Text, score: e.Score }))
+  console.log(filteredKeywords)
   return filteredKeywords
 }
-
-// const s3Bucket = 'textract-buffer-cienciathon-2021'
-
-// const main = async () => {
-//   // Subimos la imagen al bucket
-//   const fileName = 'bases-convocatoria-cienciathon-pca-2021-1.png'
-//   const filePath = path.join(__dirname, fileName)
-
-//   const s3Name = uuidv4() // Usamos una uuid para evitar que los nombres de los archivos colisionen
-//   const upload = await uploadToS3(filePath, s3Bucket, s3Name)
-
-//   // Leemos el texto de la imagen
-//   const text = await getText(upload.Bucket, upload.Key)
-//   const rawParagraphs = await getRawParagraphs(text)
-
-//   // Eliminamos la imagen del bucket
-//   removeFromS3(upload.Bucket, upload.Key)
-
-//   //const keywords = await getKeywords(text)
-
-//   console.log(rawParagraphs)
-// }
-// main()
 
 module.exports = { uploadToS3, removeFromS3, getTextBlocks, getRawParagraphs, getKeywords }

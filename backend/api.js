@@ -87,10 +87,9 @@ app.put('/api/uploadFile', (req, res) => {
 
       // Get the keywords and add each one to the DB
       const keywords = await parnaxusUtils.getKeywords(paragraph)
-      console.log(keywords)
       for (const keyword of keywords) {
         try {
-          dbUtils.addParagraphKeyword(paragraphHash, keyword)
+          dbUtils.addParagraphKeyword(paragraphHash, keyword.text, keyword.score)
         } catch (err) {}
       }
     }

@@ -67,6 +67,7 @@ CREATE TABLE "PARAGRAPHS" (
 CREATE TABLE "KEYWORDS" (
 	"paragraphHash"	TEXT NOT NULL,
 	"keyword"	TEXT NOT NULL,
+  "score"	INTEGER NOT NULL,
 	FOREIGN KEY("paragraphHash") REFERENCES "PARAGRAPHS"("hash"),
 	PRIMARY KEY("paragraphHash","keyword")
 )
