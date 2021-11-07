@@ -1,0 +1,20 @@
+{
+  "name": "cienciathon-2021",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "scripts": {
+    "start": "node api.js",
+    "genDb": "node genDb.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1023.0",
+    "better-sqlite3": "^7.4.4",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "uuid": "^8.3.2"
+  }
+}
