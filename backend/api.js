@@ -18,6 +18,8 @@ const app = express()
 app.use(fileupload())
 app.use(cors())
 
+app.use('/', express.static(path.join(__dirname, '..', 'frontend')))
+
 // Create the directory where we store the files temporarily
 try { fs.mkdirSync(path.join(__dirname, 'tmp')) } catch (err) {}
 
