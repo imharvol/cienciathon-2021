@@ -90,7 +90,6 @@ const getParagraphKeywords = (paragraphHash) => {
 }
 
 const getFullFile = (fileHash) => {
-  console.log(fileHash)
   let file = getFile(fileHash)
   if (!file) throw new Error('File hash desconocido')
 

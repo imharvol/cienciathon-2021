@@ -44,42 +44,31 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Hash</th>
+                <th scope="col">Name</th>
+                <th scope="col">Upload Date</th>
+								<th scope="col">Keywords</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
+            <tbody id="files-tbody">
+
+              <!--<tr>
                 <th scope="row">1</th>
                 <td>Mark</td>
                 <td>Otto</td>
                 <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+              </tr>-->
             </tbody>
           </table>
         </center>
 
-        <p>
-          Introduce one or several scanned PDF files, Parnaxus will store its
-          plain text and retrieve key words and infometrics for you.
-        </p>
-
+				<br><br></br>
         <center>
-          <a href="http://www.google.com" target="_blank">Import Data</a>
+	        <p>
+  	        Introduce one or several scanned PDF files, Parnaxus will store its
+    	      plain text and retrieve key words and infometrics for you.
+      	  </p>
+					<input type="file" id="fileUpload" multiple="true"/>
         </center>
 
         <p style="font-size: 11px" px>
@@ -87,5 +76,7 @@
         </p>
       </div>
     </div>
+
+		<script src="./index.js"></script>
   </body>
 </html>
