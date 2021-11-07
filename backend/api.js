@@ -1,3 +1,5 @@
+// parnaxus.cienciathon@gmail.com
+
 const path = require('path')
 const fs = require('fs')
 const crypto = require('crypto')
@@ -6,6 +8,7 @@ const parnaxusUtils = require('./parnaxusUtils')
 const express = require('express')
 const fileupload = require('express-fileupload')
 const dbUtils = require('./dbUtils')
+const cors = require('cors')
 
 const s3Bucket = 'textract-buffer-cienciathon-2021'
 const port = 3000
@@ -13,6 +16,7 @@ const port = 3000
 const app = express()
 
 app.use(fileupload())
+app.use(cors())
 
 // Create the directory where we store the files temporarily
 try { fs.mkdirSync(path.join(__dirname, 'tmp')) } catch (err) {}

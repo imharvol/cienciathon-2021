@@ -76,7 +76,7 @@ const getAllFiles = () => {
  * @returns {Array<String>} Array with the file's keyword
  */
 const getFileKeywords = (fileHash) => {
-  return db.prepare('SELECT keyword FROM KEYWORDS k, PARAGRAPHS p, FILES f WHERE k.paragraphHash = p.hash AND p.fileHash = ?').all(fileHash).map(e => e.keyword)
+  return db.prepare('SELECT DISTINCT keyword FROM KEYWORDS k, PARAGRAPHS p, FILES f WHERE k.paragraphHash = p.hash AND p.fileHash = ?').all(fileHash).map(e => e.keyword)
 }
 
 /**

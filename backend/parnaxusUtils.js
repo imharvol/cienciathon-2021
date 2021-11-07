@@ -159,7 +159,7 @@ const getKeywords = async (text) => {
     LanguageCode: textLanguage
   }
   const keywords = await comprehend.detectKeyPhrases(params).promise()
-  const filteredKeywords = keywords.KeyPhrases.filter(e => e.Score >= 0.99).map(e => e.Text)
+  const filteredKeywords = keywords.KeyPhrases.filter(e => e.Score >= 0.99997).map(e => e.Text)
 
   return filteredKeywords
 }
