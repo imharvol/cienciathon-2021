@@ -115,6 +115,14 @@ app.get('/api/getFiles', (req, res) => {
   res.status(200).json(files)
 })
 
+app.get('/api/getFullFile', (req, res) => {
+  const fileHash = req.query.hash
+
+  const fullFile = dbUtils.getFullFile(fileHash)
+
+  res.status(200).json(fullFile)
+})
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })

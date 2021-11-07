@@ -3,7 +3,7 @@ const Database = require('better-sqlite3')
 
 // Connect to the DB
 const dbFilePath = path.join(__dirname, 'db.sqlite')
-const db = new Database(dbFilePath, { verbose: console.log })
+const db = new Database(dbFilePath/*, { verbose: console.log }*/)
 
 /**
  * Retrieves a file from the DB
@@ -54,12 +54,13 @@ const addFileParagraph = (fileHash, hash, contents, position) => {
  * Adds a keyword to a pargraph
  * @param {String} filehash Hash of the file
  * @param {String} keyword Keyword to add to the file
+ * @param {String} score Score of the keyword
  */
-const addParagraphKeyword = (paragraphHash, keyword) => {
+const addParagraphKeyword = (paragraphHash, keyword, score) => {
   const sameKeyword = db.prepare('SELECT * FROM KEYWORDS WHERE paragraphHash = ? AND keyword = ?').get(paragraphHash, keyword)
   if (sameKeyword) throw new Error(`That paragraph already has the keyword: ${keyword}`)
 
-  db.prepare('INSERT INTO KEYWORDS (paragraphHash, keyword) VALUES (?, ?)').run(paragraphHash, keyword)
+  db.prepare('INSERT INTO KEYWORDS (paragraphHash, keyword, score) VALUES (?, ?, ?)').run(paragraphHash, keyword, score)
 }
 
 /**
@@ -73,21 +74,34 @@ const getAllFiles = () => {
 /**
  * Returns the keywords of a file
  * @param {String} fileHash Hash of the file
- * @returns {Array<String>} Array with the file's keyword
+ * @returns {Array<String>} Array with the file's keyword. Each keyword is structured like an object with properties text and score
  */
 const getFileKeywords = (fileHash) => {
-  return db.prepare('SELECT DISTINCT keyword FROM KEYWORDS k, PARAGRAPHS p, FILES f WHERE k.paragraphHash = p.hash AND p.fileHash = ?').all(fileHash).map(e => e.keyword)
+  return db.prepare('SELECT DISTINCT keyword, score FROM KEYWORDS k, PARAGRAPHS p, FILES f WHERE k.paragraphHash = p.hash AND p.fileHash = ?').all(fileHash)//.map(e => e.keyword)
 }
 
 /**
  * Returns the keywords of a paragraph
  * @param {String} paragraphHash Hash of the paragraph
- * @returns {Array<String>} Array with the paragraph's keyword
+ * @returns {Array<String>} Array with the paragraph's keyword. Each keyword is structured like an object with properties text and score
  */
 const getParagraphKeywords = (paragraphHash) => {
-  return db.prepare('SELECT keyword FROM KEYWORDS WHERE paragraphHash = ?').all(paragraphHash).map(e => e.keyword)
+  return db.prepare('SELECT keyword, score FROM KEYWORDS WHERE paragraphHash = ?').all(paragraphHash)//.map(e => e.keyword)
+}
+
+const getFullFile = (fileHash) => {
+  console.log(fileHash)
+  let file = getFile(fileHash)
+  if (!file) throw new Error('File hash desconocido')
+
+  file.paragraphs = db.prepare('SELECT * FROM PARAGRAPHS WHERE fileHash = ?').all(fileHash)
+  
+  for (let paragraph of file.paragraphs) {
+    paragraph.keywords = getParagraphKeywords(paragraph.hash)
+  }
+
+  return file
 }
 
 
-
-module.exports = { getFile, getParagraph, addFile, addFileParagraph, addParagraphKeyword, getAllFiles, getFileKeywords, getParagraphKeywords }
+module.exports = { getFile, getParagraph, addFile, addFileParagraph, addParagraphKeyword, getAllFiles, getFileKeywords, getParagraphKeywords, getFullFile }
