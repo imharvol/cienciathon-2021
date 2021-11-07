@@ -75,7 +75,7 @@ const removeFromS3 = (s3Bucket, s3Name) => {
  * Reads text from an object
  * @param {String} s3Bucket Bucket's name
  * @param {String} s3Name Object's name
- * @returns {String} Text obtained from the file
+ * @returns {Array<Block>} Array of Blocks (https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Textract.html#detectDocumentText-property)
  */
 const getText = async (s3Bucket, s3Name) => {
   const params = {
@@ -91,7 +91,12 @@ const getText = async (s3Bucket, s3Name) => {
   return blocks//.filter(e => e.BlockType === 'LINE').map(e => e.Text).join('\n')
 }
 
-const getRawParagraphs = (blocks) => {
+/**
+ * Turns blocks (https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Textract.html#detectDocumentText-property) into paragraphs
+ * @param {Array<Block>} blocks Array of blocks (https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Textract.html#detectDocumentText-property)
+ * @returns {Array<String>} Array of paragraphs obtained from the blocks
+ */
+const getRawParagraphs = (blocks) => { // TODO: RAYADA, COMPROBAR CON OTROS DOCUMENTOS
   const lines = blocks.filter(e => e.BlockType === 'LINE')
   const rawParagraphs = []
   let buffer = ''
@@ -135,6 +140,11 @@ const getRawParagraphs = (blocks) => {
   return rawParagraphs
 }
 
+/**
+ * Extrats keywords from a text
+ * @param {String} text Text of under 5000 bytes in size
+ * @returns {Array<String>} Array of keywords extracted from the text
+ */
 const getKeywords = async (text) => {
   const textByteLengthLimit = 5000
   const textByteLength = Buffer.from(text).length
@@ -152,25 +162,27 @@ const getKeywords = async (text) => {
   return filteredKeywords
 }
 
-const s3Bucket = 'textract-buffer-cienciathon-2021'
+// const s3Bucket = 'textract-buffer-cienciathon-2021'
 
-const main = async () => {
-  // Subimos la imagen al bucket
-  const fileName = 'bases-convocatoria-cienciathon-pca-2021-1.png'
-  const filePath = path.join(__dirname, fileName)
+// const main = async () => {
+//   // Subimos la imagen al bucket
+//   const fileName = 'bases-convocatoria-cienciathon-pca-2021-1.png'
+//   const filePath = path.join(__dirname, fileName)
 
-  const s3Name = uuidv4() // Usamos una uuid para evitar que los nombres de los archivos colisionen
-  const upload = await uploadToS3(filePath, s3Bucket, s3Name)
+//   const s3Name = uuidv4() // Usamos una uuid para evitar que los nombres de los archivos colisionen
+//   const upload = await uploadToS3(filePath, s3Bucket, s3Name)
 
-  // Leemos el texto de la imagen
-  const text = await getText(upload.Bucket, upload.Key)
-  const rawParagraphs = await getRawParagraphs(text)
+//   // Leemos el texto de la imagen
+//   const text = await getText(upload.Bucket, upload.Key)
+//   const rawParagraphs = await getRawParagraphs(text)
 
-  // Eliminamos la imagen del bucket
-  removeFromS3(upload.Bucket, upload.Key)
+//   // Eliminamos la imagen del bucket
+//   removeFromS3(upload.Bucket, upload.Key)
 
-  //const keywords = await getKeywords(text)
+//   //const keywords = await getKeywords(text)
 
-  console.log(rawParagraphs)
-}
-main()
+//   console.log(rawParagraphs)
+// }
+// main()
+
+module.exports = { uploadToS3, removeFromS3, getText, getRawParagraphs, getKeywords }
