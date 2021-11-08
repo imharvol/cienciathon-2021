@@ -6,7 +6,7 @@ window.addEventListener('load', async () => {
   const fileHash = (new URL(document.location.href)).searchParams.get('hash')
   if (!fileHash) document.location = '/'
 
-  var url = new URL('http://localhost:3000/api/getFullFile')
+  var url = new URL(`${document.location.protocol}//${document.location.host}/api/getFullFile`)
   var params = {hash: fileHash}
   url.search = new URLSearchParams(params).toString();
 

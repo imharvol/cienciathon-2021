@@ -103,7 +103,7 @@ app.put('/api/uploadFile', (req, res) => {
   const plural = Object.values(req.files).length > 1
   res.status(200).json({
     ok: true,
-    msg: `Your file${plural ? 's' : ''} ${plural ? 'are' : 'is'} being processed, they should be avaliable shortly`
+    msg: `Your file${plural ? 's' : ''} ${plural ? 'are' : 'is'} being processed, ${plural ? 'they' : 'it'} should be avaliable shortly`
   })
 })
 

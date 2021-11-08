@@ -4,7 +4,7 @@ const mainPageMinKeywordScore = 0.99997
 
 window.addEventListener('load', async () => {
   // Once the page is loaded, try to fetch the file list and print it
-  const files = await (await fetch('http://localhost:3000/api/getFiles')).json()
+  const files = await (await fetch(`${document.location.protocol}//${document.location.host}/api/getFiles`)).json()
   
   for (const file of files) {
     console.log(file)
@@ -38,10 +38,12 @@ document.querySelector('#fileUpload').addEventListener('change', async event => 
     formData.append(file.name, file)
   }
 
-  const response = await (await fetch('http://localhost:3000/api/uploadFile', {
+  const response = await (await fetch(`${document.location.protocol}//${document.location.host}/api/uploadFile`, {
     method: 'PUT',
     body: formData
   })).json()
 
   console.log(response)
+
+  document.getElementById('uploadNotice').innerText = response.msg
 })
